@@ -1,23 +1,45 @@
-# End-user guide: User unable to connect to the server
+# SOP-104: Troubleshooting Network Share Access & VLAN Misconfigurations
 
-*Target Audience: Users working from the office on a wired device  
-*Supported OS: Windows 10 / Windows 11
-*Estimated Time: 15 - 20 minutes
-*Prerequisites: Determine the cause. Why can't the user connect to the server?
+* **Target Audience:** IT Support Specialists & Help Desk Technicians
+* **Supported OS:** Windows 10 / Windows 11
+* **Estimated Time:** 15 - 20 minutes
+* **Prerequisites:** Remote support tool access (RDP/Screen Share), switch CLI read access, and network topology documentation.
 
-# Purpose
+## Purpose
+This standard operating procedure guides technicians through diagnosing why an office-based user cannot access network share drives, with a focus on environmental changes, VLAN assignment mismatches, and Layer 3 Access Control Lists (ACLs).
 
-# Step by Step instructions
+---
 
-# Visual Reference & Verification
+## Step-by-Step Troubleshooting Workflow
 
-# How to Know It Worked
+<Steps>
+  <Step title="Initial User Interview & Scope Verification" subtitle="2 min">
+    Confirm user identity and exact error message. Ask targeted environmental questions: *Are you currently working from your assigned desk, or have you moved to a temporary office or conference room?*
+    *Verification:* User confirms physical location and exact share path failing to load.
+  </Step>
+  <Step title="Endpoint IP & Gateway Validation" subtitle="3 min">
+    Connect remotely to the workstation. Open the terminal and run `ipconfig` to verify the assigned IP address and default gateway.
+    *Verification:* Device receives a valid DHCP lease on the expected subnet.
+  </Step>
+  <Step title="Network Path & Server Reachability Tests" subtitle="3 min">
+    Test communication using `ping` to the local default gateway, then ping the target file server's IP address.
+    *Verification:* Gateway responds successfully; a "Destination unreachable" response from the server indicates a routing or firewall block.
+  </Step>
+  <Step title="Switch Port & VLAN Verification" subtitle="5 min">
+    Consult network documentation to verify subnet assignments. Access the switch CLI and run `show interface [port] switchport` to check physical port VLAN membership.
+    *Verification:* Active access mode VLAN matches the user's current physical location.
+  </Step>
+  <Step title="Layer 3 ACL & Policy Check" subtitle="5 min">
+    If the subnet lacks routing privileges to the server VLAN, inspect switch or router access lists using `show access-list`.
+    *Verification:* Identify active permit/deny rules restricting traffic between source and destination subnets.
+  </Step>
+</Steps>
 
-# Common Errors & Quick Troubleshooting
+---
 
-# Scenario A: The client displays "Connecting..." indefinitely or throws a "Portal Not Found" error.
-* **The Root Cause:** Your laptop is not actively connected to local Wi-Fi or internet.
-* **The Immediate Fix:** Open a web browser and try navigating to a public website (like `google.com`). If it fails to load, disconnect and reconnect to your home Wi-Fi network before attempting the VPN again.
+## Resolution & Remediation
+* **Root Cause:** The user was relocated to a temporary office associated with an isolated VLAN (e.g., VLAN 30 Office Users) that lacked explicit ACL permissions to reach server subnets (VLAN 100).
+* **Fix:** Re-patch the workstation switch port to the correct departmental VLAN or update network routing/ACL policies if the temporary relocation is long-term.
 
-# Still Need Help? (Escalation Path)
-
+## How to Verify Success
+Have the user re-map or navigate to the network share path (`\\HR_FILE01`), open a test file, and confirm read/write access.
