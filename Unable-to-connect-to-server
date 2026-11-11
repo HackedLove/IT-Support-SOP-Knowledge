@@ -1,0 +1,22 @@
+# End-user guide: User unable to connect to the server
+
+*Target Audience: Users working from the office on a wired device  
+*Supported OS: Windows 10 / Windows 11
+*Estimated Time: 15 - 20 minutes
+*Prerequisites: Determine the cause. Why can't the user connect to the server?
+
+# Purpose
+
+# Step by Step instructions
+
+# Visual Reference & Verification
+
+# How to Know It Worked
+
+# Common Errors & Quick Troubleshooting
+
+# Scenario A: The client displays "Connecting..." indefinitely or throws a "Portal Not Found" error.
+* **The Root Cause:** Your laptop is not actively connected to local Wi-Fi or internet.
+* **The Immediate Fix:** Open a web browser and try navigating to a public website (like `google.com`). If it fails to load, disconnect and reconnect to your home Wi-Fi network before attempting the VPN again.
+
+# Still Need Help? (Escalation Path)
